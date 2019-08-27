@@ -35,17 +35,16 @@ const mediaArray = [
 const App = () => {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
       <FlatList
         data={mediaArray}
         renderItem={({item}) => {
           return (
-            <TouchableOpacity>
+            <TouchableOpacity style={{backgroundColor: '#99e6ff', borderRadius: 4, borderWidth: 5, borderColor: '#fff', flexDirection: 'row', justifyContent: 'space-between'}}>
               <Image
-                style={{width: 100, height: 100}}
+                style={{width: 100, height: 200}}
                 source={{uri: item.thumbnails.w160}}
               />
-              <View>
+              <View style={{flexShrink: 1, borderRadius: 2, borderWidth: 4, borderColor: '#99e6ff'}}>
                 <Text>{item.title}</Text>
                 <Text>{item.description}</Text>
               </View>
@@ -61,8 +60,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    alignContent: 'stretch',
   },
 });
 
