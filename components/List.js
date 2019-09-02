@@ -4,10 +4,10 @@ import {
   FlatList,
 } from 'react-native';
 import ListItem from './ListItem';
-import {StateContext} from '../contexts/StateContext';
+import {MediaContext} from '../contexts/MediaContext';
 
 const useFetch = (url) => {
-  const [media, setMedia] = useContext(StateContext);
+  const [media, setMedia] = useContext(MediaContext);
   const [loading, setLoading] = useState(true);
   const fetchUrl = async () => {
     const response = await fetch(url);
