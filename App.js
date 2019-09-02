@@ -1,8 +1,12 @@
 /* eslint-disable max-len */
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {
+  StyleSheet,
+  View,
+} from 'react-native';
+import {MediaProvider} from './contexts/MediaContext';
 import List from './components/List';
-import {MediaProvider} from './contexts/MediaContexts';
+
 
 const App = () => {
   return (
