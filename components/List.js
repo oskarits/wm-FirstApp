@@ -15,25 +15,29 @@ const useFetch = (url) => {
     setMedia(json);
     setLoading(false);
   };
-  useEffect(fetchUrl, []);
+  useEffect(() => {
+    fetchUrl();
+  }, []);
   return [media, loading];
 };
 
 const List = (props) => {
+  const {navigation} = props;
   const [media, loading] = useFetch('http://media.mw.metropolia.fi/wbma/media/');
   console.log(loading);
   console.log('media', media);
   return (
     <FlatList
       data={media}
-      renderItem={({item}) => <ListItem singleMedia={item} />}
+      renderItem={({item}) =>
+        <ListItem navigation={navigation} singleMedia={item} />}
       keyExtractor={(item, index) => index.toString()}
     />
   );
 };
 
 List.propTypes = {
-  mediaArray: PropTypes.array,
+  navigation: PropTypes.object,
 };
 
 export default List;
