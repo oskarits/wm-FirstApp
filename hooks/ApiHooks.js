@@ -1,6 +1,6 @@
-import {useState, useContext, useEffect} from 'react';
-import {AsyncStorage} from 'react-native';
-import {MediaContext} from '../contexts/MediaContext';
+import { useState, useContext, useEffect } from 'react';
+import { AsyncStorage } from 'react-native';
+import { MediaContext } from '../contexts/MediaContext';
 
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
 
@@ -60,7 +60,7 @@ const mediaAPI = () => {
     };
     const json = await fetchPostUrl(apiUrl + 'login', data);
     await AsyncStorage.setItem('userToken', json.token);
-    // await AsyncStorage.setItem('user', JSON.stringify(json.user));
+    await AsyncStorage.setItem('user', JSON.stringify(json.user));
     props.navigation.navigate('App');
   };
   const registerAsync = async (inputs, props) => {
@@ -71,6 +71,7 @@ const mediaAPI = () => {
       'full_name': inputs.full_name,
     };
     const json = await fetchPostUrl(apiUrl + 'users', data);
+    console.log('user json data hommeli', json);
     if (!json.error) {
       signInAsync(inputs, props);
     }
@@ -83,17 +84,36 @@ const mediaAPI = () => {
     });
   };
 
-
-  const getAvatar = (user) => {
-    const [avatar, setAvatar] = useState({});
-    console.log('avatar', apiUrl + 'tags/avatar_' + user.user_id);
-    fetchGetUrl(apiUrl + 'tags/avatar_' + user.user_id).then((json) => {
-      console.log('avatarjson', json[0].filename);
-      setAvatar(apiUrl + 'uploads/' + json[0].filename);
-    });
-    return avatar;
+  const userToContext = async () => { // Call this when app starts (= Home.js)
+    const { user, setUser } = useContext(MediaContext);
+    const getFromStorage = async () => {
+      const storageUser = JSON.parse(await AsyncStorage.getItem('user'));
+      console.log('storage', storageUser);
+      setUser({
+        user_id: 123,
+        username: 'Tom'
+      });
+      console.log('Käyttäjä123', user);
+    }
+    useEffect(() => {
+      getFromStorage();
+    }, []);
+    return [user];
   };
 
+  const getAvatar = () => {
+    const { user } = useContext(MediaContext);
+    console.log('user Api', user);
+    let avatar;
+    console.log('avatar', apiUrl + 'tags/avatar_' + user.user_id);
+    return fetchGetUrl(apiUrl + 'tags/avatar_' + user.user_id).then(
+      json => {
+        console.log('avatarjson', json);
+        avatar = apiUrl + 'uploads/' + json[0].filename;
+        return avatar;
+      }
+    );
+  };
 
   return {
     getAllMedia,
@@ -102,7 +122,9 @@ const mediaAPI = () => {
     registerAsync,
     getUserFromToken,
     getAvatar,
+    userToContext
   };
 };
 
 export default mediaAPI;
+
